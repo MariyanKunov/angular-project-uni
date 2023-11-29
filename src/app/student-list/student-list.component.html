@@ -1,0 +1,51 @@
+<p-table
+  #studentsTable
+  [value]="$any(students$ | async)"
+  dataKey="id"
+  [loading]="loading"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 25%">Id</th>
+      <th style="width: 25%">Name</th>
+      <th style="width: 25%">Age</th>
+      <th style="width: 25%">University</th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter type="text" field="id"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="name"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="age"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="university"></p-columnFilter>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-student>
+    <tr>
+      <td>
+        {{ student.id }}
+      </td>
+      <td>
+        {{ student.name }}
+      </td>
+      <td>
+        {{ student.age }}
+      </td>
+      <td>
+        {{ student.university.name }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="3">No students found.</td>
+    </tr>
+  </ng-template>
+</p-table>

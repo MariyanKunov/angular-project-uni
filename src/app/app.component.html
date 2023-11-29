@@ -1,0 +1,15 @@
+<h1>Angular Students App</h1>
+
+<p-dock [model]="items" [position]="position">
+  <ng-template pTemplate="item" let-item>
+    <img
+      class="cursor-pointer"
+      [routerLink]="'students'"
+      [src]="item.icon"
+      [alt]="item.label"
+      width="100%"
+    />
+  </ng-template>
+</p-dock>
+
+<router-outlet></router-outlet>
