@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { Student } from './student.interface';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class StudentService {
-  private readonly _students = new BehaviorSubject<Student[]>([
-    { id: 1, name: 'Georgi', age: 20, university: {id: 1, name: "Tu-Sofia"}},
-    { id: 2, name: 'Ivan', age: 21, university: {id: 1, name: "Tu-Sofia"} },
-    { id: 3, name: 'Maria', age: 22, university: {id: 2, name: "Sofia Uni"}},
-  ]);
+  studentsUrl = 'http://localhost:3000/student';
+
+  private readonly _students = new BehaviorSubject<Student[]>([]);
   public readonly students$ = this._students.asObservable();
+
+  constructor(private httpClient: HttpClient) {}
 
   get students(): Student[] {
     return this._students.getValue();
@@ -19,14 +20,22 @@ export class StudentService {
     this._students.next(val);
   }
 
-  addStudent(student: Student) {
-    this.students = [
-      ...this.students,
-      { id: this.students.length + 1, name: student.name, age: student.age, university: student.university },
-    ];
+  getStudents() {
+    return this.httpClient.get(this.studentsUrl).pipe(
+      map((students) => {
+        this.students = students as unknown as Student[];
+      })
+    );
   }
 
+  addStudent(student: Student) {
+    return this.httpClient.post(this.studentsUrl, student);
+  }
+
+  updateStudent(id: number, student: Student) {
+    return this.httpClient.post(`${this.studentsUrl}/${id}`, student);
+  }
   removeStudent(id: number) {
-    this.students = this.students.filter((student) => student.id !== id);
+    return this.httpClient.delete(`${this.studentsUrl}/${id}`);
   }
 }

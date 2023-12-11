@@ -5,12 +5,27 @@
   [loading]="loading"
   [tableStyle]="{ 'min-width': '50rem' }"
 >
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <button
+        type="button"
+        pButton
+        (click)="openModal()"
+        pRipple
+        icon="pi pi-plus"
+        class="mr-2"
+        pTooltip="Add"
+        tooltipPosition="bottom"
+      ></button>
+    </div>
+  </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 25%">Id</th>
+      <th style="width: 10%">Id</th>
       <th style="width: 25%">Name</th>
       <th style="width: 25%">Age</th>
       <th style="width: 25%">University</th>
+      <th style="width: 15%">Actions</th>
     </tr>
     <tr>
       <th>
@@ -24,6 +39,8 @@
       </th>
       <th>
         <p-columnFilter type="text" field="university"></p-columnFilter>
+      </th>
+      <th>
       </th>
     </tr>
   </ng-template>
@@ -39,7 +56,19 @@
         {{ student.age }}
       </td>
       <td>
-        {{ student.university.name }}
+        {{ student?.university?.name }}
+      </td>
+      <td>
+        <button
+          type="button"
+          pButton
+          (click)="removeStudent(student.id)"
+          pRipple
+          icon="pi pi-trash"
+          class="mr-2"
+          pTooltip="Add"
+          tooltipPosition="button"
+          ></button>
       </td>
     </tr>
   </ng-template>
@@ -49,3 +78,62 @@
     </tr>
   </ng-template>
 </p-table>
+<p-toast></p-toast>
+
+<p-dialog
+  header="New Student"
+  [(visible)]="visible"
+  [style]="{ width: '50vw', height: '25rem' }"
+>
+  <div class="card">
+    <div class="flex-container">
+      <div class="col-12">
+        <span class="p-float-label">
+          <input 
+            [class]= "newStudent.name ? '' : 'ng-invalid ng-dirty'"
+            pInputText id="name" 
+            [(ngModel)]="newStudent.name" />
+          <label for="name">Name</label>
+        </span>
+      </div>
+      <div class="col-12">
+        <span class="p-float-label">
+          <p-inputNumber 
+            [class]= "newStudent.age ? '' : 'ng-invalid ng-dirty'"
+            pInputNumber id="age" 
+            [min]="18"
+            [max]="100"
+            [(ngModel)]="newStudent.age" />
+          <label for="age">Age</label>
+        </span>
+      </div>
+      <div class="col-12">
+        <span class="p-float-label">
+          <p-dropdown
+            [class]= "newStudent.university ? '' : 'ng-invalid ng-dirty'"
+            [options]="$any(universities$ | async)"
+            [(ngModel)]="newStudent.university"
+            placeholder="Select a University"
+            optionLabel="name"
+            optionValue="id"
+            inputId="university"
+          ></p-dropdown>
+          <label for="university">Select a University</label>
+        </span>
+      </div>
+      <div class="col-12 buttons">
+        <p-button
+          (click)="addStudent()"
+          icon="pi pi-check"
+          label="Confirm"
+        ></p-button>
+        <p-button
+          (click)="closeModal()"
+          icon="pi pi-times"
+          label="Cancel"
+          class="p-button-danger"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</p-dialog>

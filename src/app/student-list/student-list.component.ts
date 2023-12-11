@@ -13,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { Message, MessageService } from 'primeng/api';
 import { University } from './university.interface';
-import { UniversityService } from './univers';
+import { UniversityService } from './university.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 @Component({
   selector: 'app-student-list',
